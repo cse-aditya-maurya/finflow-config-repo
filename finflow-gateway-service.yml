@@ -1,17 +1,14 @@
-
 spring:
   cloud:
     gateway:
-      routes:
-
-        - id: auth-service
-          uri: lb://FINFLOW-AUTH-SERVICE
-          predicates:
-            - Path=/gateway/auth/**
-
-          filters:
-            - StripPrefix=1
-
+      mvc:
+        routes:
+          - id: auth-service
+            uri: lb://FINFLOW-AUTH-SERVICE
+            predicates:
+              - Path=/gateway/auth/**
+            filters:
+              - StripPrefix=1
 eureka:
   client:
     service-url:
