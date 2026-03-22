@@ -7,7 +7,8 @@ spring:
       mvc:
         routes:
           - id: auth-service
-            uri: lb://FINFLOW-AUTH-SERVICE
+            # uri: lb://FINFLOW-AUTH-SERVICE
+            uri: http://localhost:8081
             predicates:
               # - Path=/gateway/auth/**
               - Path=/gateway/**
