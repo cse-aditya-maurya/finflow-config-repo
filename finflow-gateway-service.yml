@@ -6,12 +6,32 @@ spring:
     gateway:
       mvc:
         routes:
+
           - id: auth-service
-            # uri: lb://FINFLOW-AUTH-SERVICE
-            uri: http://localhost:8081
+            uri: lb://FINFLOW-AUTH-SERVICE
             predicates:
-              # - Path=/gateway/auth/**
-              - Path=/gateway/**
+              - Path=/gateway/auth/**
+            filters:
+              - StripPrefix=1
+
+          - id: application-service
+            uri: lb://FINFLOW-APPLICATION-SERVICE
+            predicates:
+              - Path=/gateway/applications/**
+            filters:
+              - StripPrefix=1
+
+          - id: document-service
+            uri: lb://FINFLOW-DOCUMENT-SERVICE
+            predicates:
+              - Path=/gateway/documents/**
+            filters:
+              - StripPrefix=1
+
+          - id: admin-service
+            uri: lb://FINFLOW-ADMIN-SERVICE
+            predicates:
+              - Path=/gateway/admin/**
             filters:
               - StripPrefix=1
 
