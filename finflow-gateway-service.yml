@@ -9,7 +9,8 @@ spring:
           - id: auth-service
             uri: lb://FINFLOW-AUTH-SERVICE
             predicates:
-              - Path=/gateway/auth/**
+              # - Path=/gateway/auth/**
+              - Path=/gateway/**
             filters:
               - StripPrefix=1
 
