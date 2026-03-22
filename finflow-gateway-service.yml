@@ -1,21 +1,15 @@
 spring:
   cloud:
     gateway:
-      mvc:
-        routes:
-          - id: auth-service
-            uri: lb://FINFLOW-AUTH-SERVICE
-            predicates:
-              - Path=/gateway/auth/**
-            filters:
-              - StripPrefix=1
+      routes:
+        - id: auth-service
+          uri: lb://FINFLOW-AUTH-SERVICE
+          predicates:
+            - Path=/gateway/auth/**
+          filters:
+            - StripPrefix=1
+
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
