@@ -63,51 +63,28 @@
 
 
 
-
-
-
-
-server:
-  port: 9090
-
 spring:
-  application:
-    name: finflow-api-gateway
-
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
+      mvc:
+        routes:
 
-      routes:
+          - id: auth-service
+            uri: lb://FINFLOW-AUTH-SERVICE
+            predicates:
+              - Path=/auth/**
 
-        - id: auth-service
-          uri: lb://finflow-auth-service
-          predicates:
-            - Path=/auth/**
+          - id: application-service
+            uri: lb://FINFLOW-APPLICATION-SERVICE
+            predicates:
+              - Path=/application/**
 
-        - id: application-service
-          uri: lb://finflow-application-service
-          predicates:
-            - Path=/application/**
+          - id: admin-service
+            uri: lb://FINFLOW-ADMIN-SERVICE
+            predicates:
+              - Path=/admin/**
 
-        - id: admin-service
-          uri: lb://finflow-admin-service
-          predicates:
-            - Path=/admin/**
-
-        - id: document-service
-          uri: lb://finflow-document-service
-          predicates:
-            - Path=/document/**
-
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
-
-jwt:
-  secret: finflowsecretkeyfinflowsecretkey
+          - id: document-service
+            uri: lb://FINFLOW-DOCUMENT-SERVICE
+            predicates:
+              - Path=/document/**
