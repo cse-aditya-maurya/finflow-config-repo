@@ -61,29 +61,47 @@
 
 
 
-
 spring:
   cloud:
     gateway:
       mvc:
+        enabled: true
+
         routes:
 
           - id: auth-service
             uri: lb://FINFLOW-AUTH-SERVICE
             predicates:
-              - Path=/auth/**
+              - name: Path
+                args:
+                  pattern: /auth/**
 
           - id: application-service
             uri: lb://FINFLOW-APPLICATION-SERVICE
             predicates:
-              - Path=/application/**
+              - name: Path
+                args:
+                  pattern: /application/**
 
           - id: admin-service
             uri: lb://FINFLOW-ADMIN-SERVICE
             predicates:
-              - Path=/admin/**
+              - name: Path
+                args:
+                  pattern: /admin/**
 
           - id: document-service
             uri: lb://FINFLOW-DOCUMENT-SERVICE
             predicates:
-              - Path=/document/**
+              - name: Path
+                args:
+                  pattern: /document/**
+
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
