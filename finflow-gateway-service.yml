@@ -57,59 +57,33 @@
 
 
 
-
-
 spring:
   cloud:
     gateway:
-      mvc:
-        enabled: true
+      server:
+        webmvc:
 
-        routes:
+          routes:
 
-          - id: auth-service
-            uri: lb://FINFLOW-AUTH-SERVICE
-            predicates:
-              - name: Path
-                args:
-                  pattern: /auth/**
-            filters:
-              - name: StripPrefix
-                args:
-                  parts: 0
+            - id: auth-service
+              uri: lb://FINFLOW-AUTH-SERVICE
+              predicates:
+                - Path=/auth/**
 
-          - id: application-service
-            uri: lb://FINFLOW-APPLICATION-SERVICE
-            predicates:
-              - name: Path
-                args:
-                  pattern: /application/**
-            filters:
-              - name: StripPrefix
-                args:
-                  parts: 0
+            - id: application-service
+              uri: lb://FINFLOW-APPLICATION-SERVICE
+              predicates:
+                - Path=/application/**
 
-          - id: admin-service
-            uri: lb://FINFLOW-ADMIN-SERVICE
-            predicates:
-              - name: Path
-                args:
-                  pattern: /admin/**
-            filters:
-              - name: StripPrefix
-                args:
-                  parts: 0
+            - id: admin-service
+              uri: lb://FINFLOW-ADMIN-SERVICE
+              predicates:
+                - Path=/admin/**
 
-          - id: document-service
-            uri: lb://FINFLOW-DOCUMENT-SERVICE
-            predicates:
-              - name: Path
-                args:
-                  pattern: /document/**
-            filters:
-              - name: StripPrefix
-                args:
-                  parts: 0
+            - id: document-service
+              uri: lb://FINFLOW-DOCUMENT-SERVICE
+              predicates:
+                - Path=/document/**
 
 logging:
   level:
