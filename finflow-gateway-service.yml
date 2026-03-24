@@ -83,7 +83,7 @@ spring:
             - id: document-service
               uri: lb://FINFLOW-DOCUMENT-SERVICE
               predicates:
-                - Path=/document/**
+                - Path=/documents/**
 
 logging:
   level:
