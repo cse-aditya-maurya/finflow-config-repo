@@ -74,6 +74,8 @@ spring:
               uri: lb://FINFLOW-APPLICATION-SERVICE
               predicates:
                 - Path=/application/**
+              filters:
+                - StripPrefix=0
               # filters:
               #   - PreserveHostHeader
               #   - AddRequestHeader=Authorization, #{request.headers.Authorization}
