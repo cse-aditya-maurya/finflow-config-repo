@@ -118,7 +118,6 @@
 
 
 
-
 server:
   port: 8080
 
@@ -141,7 +140,6 @@ spring:
             - Path=/auth/**
           filters:
             - StripPrefix=0
-            - name: RequestLogging
             
         # Application Service Routes
         - id: application-service
@@ -150,7 +148,6 @@ spring:
             - Path=/applications/**
           filters:
             - StripPrefix=0
-            - name: RequestLogging
             
         # Document Service Routes
         - id: document-service
@@ -159,7 +156,6 @@ spring:
             - Path=/documents/**
           filters:
             - StripPrefix=0
-            - name: RequestLogging
             
         # Admin Service Routes
         - id: admin-service
@@ -168,7 +164,6 @@ spring:
             - Path=/admin/**
           filters:
             - StripPrefix=0
-            - name: RequestLogging
 
 # Eureka Configuration
 eureka:
@@ -181,10 +176,14 @@ eureka:
     hostname: localhost
     prefer-ip-address: true
 
-# Swagger Configuration
+# SpringDoc Configuration for Gateway
 springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
   swagger-ui:
     path: /swagger-ui.html
+    enabled: true
     urls:
       - name: Auth Service
         url: /auth/v3/api-docs
@@ -194,18 +193,17 @@ springdoc:
         url: /documents/v3/api-docs
       - name: Admin Service
         url: /admin/v3/api-docs
+    urls-primary-name: Auth Service
     try-it-out-enabled: true
     operations-sorter: method
     tags-sorter: alpha
-  api-docs:
-    path: /v3/api-docs
-    enabled: true
+    doc-expansion: none
 
 # Logging
 logging:
   level:
-    org.springframework.cloud.gateway: INFO
-    reactor.netty: INFO
+    org.springframework.cloud.gateway: DEBUG
+    org.springdoc: DEBUG
     com.finflow.gateway: DEBUG
 
 # Management endpoints
