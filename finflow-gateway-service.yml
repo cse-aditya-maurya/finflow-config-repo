@@ -57,43 +57,163 @@
 
 
 
+# spring:
+#   cloud:
+#     gateway:
+#       server:
+#         webmvc:
+
+#           routes:
+
+#             - id: auth-service
+#               uri: lb://FINFLOW-AUTH-SERVICE
+#               predicates:
+#                 - Path=/auth/**
+
+#             - id: application-service
+#               uri: lb://FINFLOW-APPLICATION-SERVICE
+#               predicates:
+#                 - Path=/application/**
+#               filters:
+#                 - StripPrefix=0
+#               # filters:
+#               #   - PreserveHostHeader
+#               #   - AddRequestHeader=Authorization, #{request.headers.Authorization}
+
+#             - id: admin-service
+#               uri: lb://FINFLOW-ADMIN-SERVICE
+#               predicates:
+#                 - Path=/admin/**
+
+#             - id: document-service
+#               uri: lb://FINFLOW-DOCUMENT-SERVICE
+#               predicates:
+#                 - Path=/documents/**
+
+# jwt:
+#   secret: finflowSecretKeyFinflowSecretKey
+#   expiration: 86400000
+
+# logging:
+#   level:
+#     org.springframework.cloud.gateway: TRACE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+server:
+  port: 8080
+
 spring:
+  application:
+    name: api-gateway
+  
   cloud:
     gateway:
-      server:
-        webmvc:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      
+      routes:
+        # Auth Service Routes
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=0
+            - name: RequestLogging
+            
+        # Application Service Routes
+        - id: application-service
+          uri: lb://application-service
+          predicates:
+            - Path=/applications/**
+          filters:
+            - StripPrefix=0
+            - name: RequestLogging
+            
+        # Document Service Routes
+        - id: document-service
+          uri: lb://document-service
+          predicates:
+            - Path=/documents/**
+          filters:
+            - StripPrefix=0
+            - name: RequestLogging
+            
+        # Admin Service Routes
+        - id: admin-service
+          uri: lb://admin-service
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix=0
+            - name: RequestLogging
 
-          routes:
+# Eureka Configuration
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
 
-            - id: auth-service
-              uri: lb://FINFLOW-AUTH-SERVICE
-              predicates:
-                - Path=/auth/**
+# Swagger Configuration
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: Auth Service
+        url: /auth/v3/api-docs
+      - name: Application Service
+        url: /applications/v3/api-docs
+      - name: Document Service
+        url: /documents/v3/api-docs
+      - name: Admin Service
+        url: /admin/v3/api-docs
+    try-it-out-enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
 
-            - id: application-service
-              uri: lb://FINFLOW-APPLICATION-SERVICE
-              predicates:
-                - Path=/application/**
-              filters:
-                - StripPrefix=0
-              # filters:
-              #   - PreserveHostHeader
-              #   - AddRequestHeader=Authorization, #{request.headers.Authorization}
-
-            - id: admin-service
-              uri: lb://FINFLOW-ADMIN-SERVICE
-              predicates:
-                - Path=/admin/**
-
-            - id: document-service
-              uri: lb://FINFLOW-DOCUMENT-SERVICE
-              predicates:
-                - Path=/documents/**
-
-jwt:
-  secret: finflowSecretKeyFinflowSecretKey
-  expiration: 86400000
-
+# Logging
 logging:
   level:
-    org.springframework.cloud.gateway: TRACE
+    org.springframework.cloud.gateway: INFO
+    reactor.netty: INFO
+    com.finflow.gateway: DEBUG
+
+# Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway,routes
+  endpoint:
+    gateway:
+      enabled: true
